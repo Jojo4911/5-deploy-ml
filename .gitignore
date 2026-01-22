@@ -1,0 +1,24 @@
+# Environnement virtuel (Poetry)
+.venv/
+venv/
+ENV/
+
+# Caches Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environnement / Secrets
+.env
+
+# Données et Modèles (Trop lourds pour Git)
+*.csv
+*.parquet
+*.pkl
+*.joblib
+*.h5
+
+# Distribution / Build
+dist/
+build/
+*.egg-info/
