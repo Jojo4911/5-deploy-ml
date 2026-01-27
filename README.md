@@ -1,3 +1,13 @@
+---
+title: 5-deploy-ml
+emoji: 🔮
+colorFrom: orange
+colorTo: pink
+sdk: docker
+pinned: false
+short_description: Employee Attrition Prediction
+---
+
 # Futurisys - POC : Prédiction de l'Attrition Employé (TechNova Partners)
 
 ## 📋 Présentation du Projet
