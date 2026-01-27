@@ -1,7 +1,7 @@
 ---
 title: 5-deploy-ml
 emoji: 🔮
-colorFrom: orange
+colorFrom: yellow
 colorTo: pink
 sdk: docker
 pinned: false
