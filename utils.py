@@ -6,9 +6,7 @@ def preprocess_input(data: EmployeeData):
     mapping_deplacement = {"Aucun": 0, "Occasionnel": 1, "Frequent": 2}
     mapping_heures_sup = {"Non": 0, "Oui": 1}
 
-    CONV_frequence_deplacement = mapping_deplacement[
-        data.frequence_deplacement
-    ]
+    CONV_frequence_deplacement = mapping_deplacement[data.frequence_deplacement]
     CONV_heure_supplementaires = mapping_heures_sup[data.heure_supplementaires]
 
     # 2. Feature Engineering Calculations (FE_)
@@ -17,29 +15,21 @@ def preprocess_input(data: EmployeeData):
         FE_tension_heures_sup = 0
         FE_tension_distance = 0
     else:
-        FE_tension_deplacement = (
-            CONV_frequence_deplacement / data.revenu_mensuel
-        )
-        FE_tension_heures_sup = (
-            CONV_heure_supplementaires / data.revenu_mensuel
-        )
-        FE_tension_distance = (
-            data.distance_domicile_travail / data.revenu_mensuel
-        )
+        FE_tension_deplacement = CONV_frequence_deplacement / data.revenu_mensuel
+        FE_tension_heures_sup = CONV_heure_supplementaires / data.revenu_mensuel
+        FE_tension_distance = data.distance_domicile_travail / data.revenu_mensuel
 
     FE_moyenne_satisfaction = (
-        data.satisfaction_employee_environnement +
-        data.satisfaction_employee_nature_travail +
-        data.satisfaction_employee_equipe +
-        data.satisfaction_employee_equilibre_pro_perso
+        data.satisfaction_employee_environnement
+        + data.satisfaction_employee_nature_travail
+        + data.satisfaction_employee_equipe
+        + data.satisfaction_employee_equilibre_pro_perso
     ) / 4
 
     if data.annee_experience_totale == 0:
         FE_rentabilite_experience = 0
     else:
-        FE_rentabilite_experience = (
-            data.revenu_mensuel / data.annee_experience_totale
-        )
+        FE_rentabilite_experience = data.revenu_mensuel / data.annee_experience_totale
 
     # 3. Return the transformed data
     transformed_features = [
@@ -59,7 +49,7 @@ def preprocess_input(data: EmployeeData):
         FE_rentabilite_experience,
         data.satisfaction_employee_environnement,
         data.note_evaluation_precedente,
-        data.satisfaction_employee_equilibre_pro_perso
+        data.satisfaction_employee_equilibre_pro_perso,
     ]
 
     return [transformed_features]
