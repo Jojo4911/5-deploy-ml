@@ -16,6 +16,11 @@ jobs:
           architecture: x64
       - name: Checkout PyTorch
         uses: actions/checkout@master
+      - name: Create flake8 config
+        run: |
+          echo "[flake8]" > .flake8
+          echo "max-line-length = 88" >> .flake8
+          echo "extend-ignore = E203" >> .flake8
       - name: Install flake8
         run: pip install flake8
       - name: Run flake8
