@@ -15,6 +15,7 @@ app = FastAPI(
 def read_root():
     return {"message": "Welcome to the Prediction API!"}
 
+
 @app.post("/predict")
 def predict_attrition(input_data: EmployeeData):
     feature_vector = preprocess_input(input_data)

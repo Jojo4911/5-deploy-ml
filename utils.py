@@ -10,7 +10,7 @@ def preprocess_input(data: EmployeeData):
         data.frequence_deplacement
     ]
     CONV_heure_supplementaires = mapping_heures_sup[data.heure_supplementaires]
-    
+
     # 2. Feature Engineering Calculations (FE_)
     if data.revenu_mensuel == 0:
         FE_tension_deplacement = 0
@@ -26,7 +26,6 @@ def preprocess_input(data: EmployeeData):
         FE_tension_distance = (
             data.distance_domicile_travail / data.revenu_mensuel
         )
-
 
     FE_moyenne_satisfaction = (
         data.satisfaction_employee_environnement +
@@ -62,5 +61,5 @@ def preprocess_input(data: EmployeeData):
         data.note_evaluation_precedente,
         data.satisfaction_employee_equilibre_pro_perso
     ]
-    
+
     return [transformed_features]
