@@ -4,7 +4,9 @@ from utils import preprocess_input
 
 app = FastAPI(
     title="Employee Retention Prediction API",
-    description="API to predict whether an employee will leave the company (Project 4)",
+    description=(
+        "API to predict whether an employee will resign"
+    ),
     version="1.0.0"
 )
 
@@ -19,7 +21,11 @@ def predict_attrition(input_data: EmployeeData):
     prediction = 1
     probability = 0.85
 
-    result = "The employee is about to resign." if prediction == 1 else "The employee stays"
+    result = (
+        "The employee is about to resign."
+        if prediction == 1 else
+        "The employee stays"
+    )
 
     return {
         "prediction": result,
