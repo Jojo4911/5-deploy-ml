@@ -1,6 +1,7 @@
 from typing import Literal
 from pydantic import BaseModel, NonNegativeInt, PositiveInt
 
+
 class EmployeeData(BaseModel):
     frequence_deplacement: Literal["Aucun", "Occasionnel", "Frequent"]
     revenu_mensuel: NonNegativeInt
