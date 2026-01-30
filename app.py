@@ -1,6 +1,10 @@
+import joblib
 from fastapi import FastAPI
 from schemas import EmployeeData
 from utils import preprocess_input
+from sklearn.ensemble import RandomForestClassifier
+
+model: RandomForestClassifier = joblib.load("model.joblib")
 
 app = FastAPI(
     title="Employee Retention Prediction API",
@@ -16,17 +20,24 @@ def read_root():
 
 @app.post("/predict")
 def predict_attrition(input_data: EmployeeData):
-    feature_vector = preprocess_input(input_data)
-    prediction = 1
-    probability = 0.85
+    features_vector = preprocess_input(input_data)
 
-    if prediction == 1:
-        result = "The employee is about to resign."
+    prediction = model.predict(features_vector)
+
+    try:
+        probability = model.predict_proba(features_vector)[0][1]
+    except Exception:
+        probability = None
+
+    predicted_class = int(prediction[0])
+
+    if predicted_class == 1:
+        result = "The employee is likely to resign."
     else:
-        result = "The employee stays"
+        result = "The employee is likely to stay"
 
     return {
         "prediction": result,
         "probability": probability,
-        "input_processed": feature_vector,
+        "input_processed": features_vector,
     }

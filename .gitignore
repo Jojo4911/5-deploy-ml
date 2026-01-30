@@ -15,7 +15,6 @@ __pycache__/
 *.csv
 *.parquet
 *.pkl
-*.joblib
 *.h5
 
 # Distribution / Build
