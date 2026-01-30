@@ -18,6 +18,21 @@ def read_root():
     return {"message": "Welcome to the Prediction API!"}
 
 
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "machine_learning_model": "loaded"}
+
+
+@app.get("/model-info")
+def get_model_info():
+    return {
+        "model_name": "RandomForestClassifier",
+        "version": "1.0.0",
+        "description": "Employee attrition prediction model",
+        "author": "Jonathan Fernandez",
+    }
+
+
 @app.post("/predict")
 def predict_attrition(input_data: EmployeeData):
     features_vector = preprocess_input(input_data)
