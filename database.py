@@ -8,10 +8,6 @@ import urllib.parse
 # Loading the variables from the .env file.
 load_dotenv()
 
-# Password definition
-raw_password = "J0n@th@n"
-encoded_password = urllib.parse.quote_plus(raw_password)
-
 # PostgreSQL URL Connection
 user = os.getenv("DB_USER")
 password = os.getenv("DB_PASSWORD")
