@@ -12,7 +12,6 @@ __pycache__/
 .env
 
 # Données et Modèles (Trop lourds pour Git)
-*.csv
 *.parquet
 *.pkl
 *.h5

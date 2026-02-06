@@ -1,8 +1,11 @@
 import joblib
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from schemas import EmployeeData
 from utils import preprocess_input
 from sklearn.ensemble import RandomForestClassifier
+from sqlalchemy.orm import Session
+from database import SessionLocal, PredictionHistory
+import datetime
 
 model: RandomForestClassifier = joblib.load("model.joblib")
 
@@ -11,6 +14,14 @@ app = FastAPI(
     description="API to predict whether an employee will resign",
     version="1.0.0",
 )
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 @app.get("/")
@@ -34,11 +45,14 @@ def get_model_info():
 
 
 @app.post("/predict")
-def predict_attrition(input_data: EmployeeData):
+def predict_attrition(input_data: EmployeeData, db: Session = Depends(get_db)):
+    # Preprocessing
     features_vector = preprocess_input(input_data)
 
+    # Compute the Prediction with the model
     prediction = model.predict(features_vector)
 
+    # Get the probability of the prediction
     try:
         probability = model.predict_proba(features_vector)[0][1]
     except Exception:
@@ -46,6 +60,23 @@ def predict_attrition(input_data: EmployeeData):
 
     predicted_class = int(prediction[0])
 
+    # Database addition
+    try:
+        new_entry = PredictionHistory(
+            timestamp = datetime.datetime.now(),
+            **input_data.model_dump(),
+            prediction=str(predicted_class),
+            probability=float(probability)
+        )
+
+        # Database saving
+        db.add(new_entry)
+        db.commit()
+    except Exception as e:
+        print(f"Warning: Impossible to save into the database. (Error: {e})")
+        print('The API continues in "no-persistent" mode')
+
+    # Response message
     if predicted_class == 1:
         result = "The employee is likely to resign."
     else:
