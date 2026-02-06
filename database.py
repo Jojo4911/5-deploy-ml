@@ -1,14 +1,29 @@
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Float, DateTime
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
+import os
+from dotenv import load_dotenv
 import urllib.parse
+
+# Loading the variables from the .env file.
+load_dotenv()
 
 # Password definition
 raw_password = "J0n@th@n"
 encoded_password = urllib.parse.quote_plus(raw_password)
 
 # PostgreSQL URL Connection
-SQLALCHEMY_DATABASE_URL = f"postgresql://postgres:{encoded_password}@localhost/projet5_db"
+user = os.getenv("DB_USER")
+password = os.getenv("DB_PASSWORD")
+if password:
+    password = urllib.parse.quote_plus(password)
+host = os.getenv("DB_HOST")
+db_name = os.getenv("DB_NAME")
+
+if user and password and host and db_name:
+    SQLALCHEMY_DATABASE_URL = f"postgresql://{user}:{password}@{host}/{db_name}"
+else:
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"  # Temporary example
 
 # Engine creation
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
@@ -16,13 +31,14 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 # Session class creation
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 # Classes definition
 class Base(DeclarativeBase):
     pass
 
+
 class PredictionHistory(Base):
     __tablename__ = "predictions"
-    
     id = Column(Integer, primary_key=True, index=True)
     timestamp = Column(DateTime, index=True)
     frequence_deplacement = Column(String)

@@ -1,6 +1,6 @@
 import pandas as pd
 import datetime
-from database import SessionLocal, PredictionHistory, engine
+from database import SessionLocal, PredictionHistory
 
 # Loading and merging
 print("Data loading and merging...")
@@ -9,23 +9,25 @@ df_sirh = pd.read_csv("extrait_sirh.csv")
 df_sondage = pd.read_csv("extrait_sondage.csv")
 
 # Key cleaning
-df_eval["eval_number_clean"] = df_eval["eval_number"].astype(str).str.replace('E_', '').astype(int)
+df_eval["eval_number_clean"] = (
+    df_eval["eval_number"].astype(str).str.replace("E_", "").astype(int)
+)
 
 # Merges
 df_merged = pd.merge(
     left=df_sirh,
     right=df_eval,
-    how='inner',
-    left_on='id_employee',
-    right_on='eval_number_clean'
+    how="inner",
+    left_on="id_employee",
+    right_on="eval_number_clean",
 )
 
 df_final = pd.merge(
     left=df_merged,
     right=df_sondage,
-    how='inner',
-    left_on='id_employee',
-    right_on='code_sondage'
+    how="inner",
+    left_on="id_employee",
+    right_on="code_sondage",
 )
 
 print(f"Merger complete. {len(df_final)} lines ready.")
