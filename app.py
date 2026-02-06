@@ -63,10 +63,10 @@ def predict_attrition(input_data: EmployeeData, db: Session = Depends(get_db)):
     # Database addition
     try:
         new_entry = PredictionHistory(
-            timestamp = datetime.datetime.now(),
+            timestamp=datetime.datetime.now(),
             **input_data.model_dump(),
             prediction=str(predicted_class),
-            probability=float(probability)
+            probability=float(probability),
         )
 
         # Database saving
