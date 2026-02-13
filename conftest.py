@@ -30,7 +30,6 @@ def test_db():
 # 3. Fixture for the test client
 @pytest.fixture()
 def client(test_db):
-
     # Function to replace the real database
     def override_get_db():
         db = TestingSessionLocal()
