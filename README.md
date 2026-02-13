@@ -227,7 +227,7 @@ La robustesse du déploiement est vérifiée par une suite de tests :
 # Lancer les tests
 pytest
 # Vérifier la couverture
-pytest --cov=app tests/
+pytest --cov=app --cov=utils
 ```
 
 ## 🔄 Pipeline CI/CD

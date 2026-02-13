@@ -20,3 +20,8 @@ __pycache__/
 dist/
 build/
 *.egg-info/
+
+# Tests
+.coverage
+.pytest_cache/
+__pycache__/
