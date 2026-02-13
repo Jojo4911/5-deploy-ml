@@ -1,5 +1,6 @@
 import joblib
 from fastapi import FastAPI, Depends
+from fastapi.responses import RedirectResponse
 from schemas import EmployeeData
 from utils import preprocess_input
 from sklearn.ensemble import RandomForestClassifier
@@ -26,7 +27,7 @@ def get_db():
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Prediction API!"}
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/health")

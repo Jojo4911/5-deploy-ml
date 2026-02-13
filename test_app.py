@@ -2,11 +2,11 @@ from unittest.mock import patch
 from sqlalchemy.exc import SQLAlchemyError
 
 
-# ---Root Endpoint---
+# ---Root Endpoint (with redirection)---
 def test_read_root(client):
-    response_read_root = client.get("/")
-    assert response_read_root.status_code == 200
-    assert response_read_root.json()["message"] == "Welcome to the Prediction API!"
+    response_read_root = client.get("/", follow_redirects=False)
+    assert response_read_root.status_code == 307
+    assert response_read_root.headers["location"] == "/docs"
 
 
 # ---Health Endpoint---
