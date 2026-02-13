@@ -1,4 +1,4 @@
-name: Lint Format and Deploy
+name: Lint Format Test and Deploy
 on:
   push:
     branches: [main]
@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Job 1: Static code analysis (Flake8)
   flake8_py3:
     runs-on: ubuntu-latest
     steps:
@@ -29,6 +30,8 @@ jobs:
           checkName: 'flake8_py3'   # NOTE: this needs to be the same as the job name
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Job 2: Formatting Check (Black)
   linter_name:
     needs: flake8_py3
     name: runner / black formatter
@@ -38,8 +41,30 @@ jobs:
       - uses: rickstaa/action-black@v1
         with:
           black_args: ". --check"
+
+  # Job 3: Unit and Functional Testing
+  tests:
+    needs: flake8_py3
+    name: Run Pytest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Run Tests with Coverage
+        run: pytest --cov=app --cov=utils
+
+  # Job 4: Deployment to Hugging Face
   sync-to-hub:
-    needs: [flake8_py3, linter_name]
+    needs: [flake8_py3, linter_name, tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
