@@ -59,8 +59,10 @@ def test_predict_endpoint_proba_error(client):
     proba_error_payload = correct_payload()
 
     # Mocking predict (to avoid crash) AND predict_proba (to trigger error)
-    with patch("app.model.predict", return_value=[0]), \
-         patch("app.model.predict_proba", side_effect=ValueError("Mock Error")):
+    with (
+        patch("app.model.predict", return_value=[0]),
+        patch("app.model.predict_proba", side_effect=ValueError("Mock Error")),
+    ):
         proba_error_response = client.post("/predict", json=proba_error_payload)
         assert proba_error_response.status_code == 200
         assert "prediction" in proba_error_response.json()
