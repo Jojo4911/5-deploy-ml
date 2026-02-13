@@ -75,5 +75,6 @@ def test_preprocess_logic(scenario, input_dict, expected_checks):
             ), f"Failure on {scenario} at index {index}"
         else:
             pytest.fail(
-                f"Index {index} out of range. The list only has {len(result_to_check)} elements."
+                f"Index {index} out of range. "
+                f"The list only has {len(result_to_check)} elements."
             )
