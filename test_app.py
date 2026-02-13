@@ -52,7 +52,18 @@ def test_predict_wrong_endpoint(client):
 
 # Testing endpoint if probability can’t be calculated
 def test_predict_endpoint_proba_error(client):
-    pass
+    """
+    Test that simulates an error during probability calculation
+    to verify that the API continues to function (try/except coverage).
+    """
+    proba_error_payload = correct_payload()
+
+    # Mocking predict (to avoid crash) AND predict_proba (to trigger error)
+    with patch("app.model.predict", return_value=[0]), \
+         patch("app.model.predict_proba", side_effect=ValueError("Mock Error")):
+        proba_error_response = client.post("/predict", json=proba_error_payload)
+        assert proba_error_response.status_code == 200
+        assert "prediction" in proba_error_response.json()
 
 
 # Testing endpoint if the database doesn’t work
