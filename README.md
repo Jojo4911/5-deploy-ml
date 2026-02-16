@@ -23,12 +23,10 @@ pinned: false
   <p align="center">
     Une solution MLOps complète pour anticiper les départs et fidéliser les talents.
     <br />
-    <a href="#demo"><strong>Explorer la démo »</strong></a>
+    <a href="#demo"><strong>Explorer la démo -></strong></a>
     <br />
     <br />
-    <a href="#api">Documentation API</a>
-    ·
-    <a href="#bugs">Signaler un Bug</a>
+    <a href="#-documentation-api">Documentation API</a>
   </p>
 </div>
 
@@ -362,6 +360,6 @@ Projet 5, réalisé dans le cadre de la formation **IA Engineer - OpenClassrooms
 
 Distribué sous la licence MIT.
 
-Contact : Jonathan FERNANDEZ - [Lien LinkedIn ou Email]
+Contact : Jonathan FERNANDEZ - [LinkedIn](https://www.linkedin.com/in/fernandezjonathan388/)
 
 <p align="right"><a href="#readme-top">⬆️ Revenir au sommaire</a></p>
