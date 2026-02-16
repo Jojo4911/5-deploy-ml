@@ -1,110 +1,199 @@
 ---
-title: 5-deploy-ml
-emoji: 🔮
-colorFrom: yellow
-colorTo: pink
+title: Futurisys - Employee Attrition Prediction
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
 sdk: docker
+app_file: Dockerfile
 pinned: false
-short_description: Employee Attrition Prediction
 ---
 
-# Futurisys - POC : Prédiction de l'Attrition Employé (TechNova Partners)
+<a id="readme-top"></a>
 
-## 📋 Présentation du Projet
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![CI/CD](https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-FFD21E?style=for-the-badge)](https://huggingface.co/spaces)
 
-Dans le cadre d'une mission pour **Futurisys**, ce projet vise à déployer un outil de classification pour l'entreprise TechNova Partners. L'objectif est d'identifier les causes racines derrière les démissions (attrition) afin de proposer des plans d'action ciblés.
+<br />
+<div align="center">
+  <h2 align="center">🚀 FUTURISYS — Prédiction de l'Attrition Employé</h2>
+  <p align="center">
+    Une solution MLOps complète pour anticiper les départs et fidéliser les talents.
+    <br />
+    <a href="#demo"><strong>Explorer la démo »</strong></a>
+    <br />
+    <br />
+    <a href="#api">Documentation API</a>
+    ·
+    <a href="#bugs">Signaler un Bug</a>
+  </p>
+</div>
 
-Le moteur de prédiction repose sur un modèle **Random Forest allégé**, optimisé pour la production. L'application est hébergée sur Hugging Face Spaces, offrant une interface API robuste et une traçabilité complète des prédictions via une base de données PostgreSQL.
+<details>
+  <summary>Table des matières</summary>
+  <ol>
+    <li><a href="#-présentation-du-projet">Présentation du Projet</a></li>
+    <li><a href="#-le-modèle-dia">Le Modèle d'IA</a></li>
+    <li><a href="#-architecture-technique">Architecture Technique</a></li>
+    <li><a href="#-guide-dutilisation">Guide d'Utilisation (Cloud & Local)</a></li>
+    <li><a href="#-documentation-api">Documentation API</a></li>
+    <li><a href="#-qualité--tests">Qualité & Tests</a></li>
+    <li><a href="#-roadmap">Roadmap</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-## 🚀 Fonctionnalités
+---
 
-* **API REST** : Développée avec FastAPI pour des performances optimales, rapidité, validation automatique avec Pydantic, documentation Swagger native.
-* **Modèle ML** : Classification binaire (Attrition: Oui/Non) via Random Forest.
-* **Hébergement Cloud** : Déploiement continu sur Hugging Face Spaces.
-* **Persistance PostgreSQL** : Historisation de chaque prédiction (inputs RH et scores d'attrition) pour analyse ultérieure. PostgreSQL a été choisi pour la persistance et l’intégrité des données et la scalabilité.
-* **Validation Pydantic** : Contrôle strict de la conformité des données employés envoyées à l'API.
-* **Tests & Qualité** : Couverture de tests unitaires et fonctionnels avec Pytest.
+## <a id="-présentation-du-projet"></a>📋 Présentation du Projet
 
-### 🛡️ Robustesse et Tolérance aux pannes
-L'application implémente une stratégie de **dégradation gracieuse** :
-* **En Local** : L'API se connecte à PostgreSQL et archive chaque requête.
-* **Sur le Cloud (Hugging Face)** : Si aucune base de données n'est configurée (ou en cas de panne DB), l'API continue de fournir des prédictions en mode "stateless" (sans persistance), garantissant la disponibilité du service.
+Dans le cadre d'une mission stratégique pour **Futurisys**, ce projet vise à fournir à l'entreprise cliente **TechNova Partners** un outil d'aide à la décision pour la gestion des ressources humaines.
 
-## 🏗️ Architecture des outils utilisés
+L'objectif est double :
+1.  **Identifier** les employés à risque de départ (attrition) grâce à l'intelligence artificielle.
+2.  **Comprendre** les causes racines grâce à l'analyse des données (salaires, satisfaction, distance domicile-travail, etc.).
 
-L’ensemble des outils utilisés peuvent être représentés selon la vue d’ensemble suivante :
+L'application est conçue selon les principes **MLOps** modernes : une API robuste, une base de données pour l'historisation, et une chaîne de déploiement continu (CI/CD) vers le cloud.
+
+<p align="right"><a href="#readme-top">⬆️ Revenir au sommaire</a></p>
+
+---
+
+## <a id="-le-modèle-dia"></a>🧠 Le Modèle d'IA
+
+Le cœur de cette solution repose sur un modèle de Machine Learning optimisé pour la production.
+
+* **Algorithme :** Random Forest Classifier (version allégée).
+* **Architecture :** Le modèle a été compressé pour garantir une inférence rapide sans sacrifier la précision.
+* **Données :** Entraîné sur un jeu de données RH complet, il utilise **17 variables explicatives** (features).
+* **Feature Engineering :** Une attention particulière a été portée à la création de données. Sur les 17 features, **5 ont été spécifiquement ingéniérées** pour capturer des signaux complexes (ex: ratio fréquence de déplacement/salaire, impact des heures supplémentaires).
+
+### Performances
+Le modèle atteint des métriques solides sur le jeu de test :
+* **Rappel (métrique la plus importante pour ce projet) :** 83%
+* **Précision :** 0.35
+
+<p align="right"><a href="#readme-top">⬆️ Revenir au sommaire</a></p>
+
+---
+
+## <a id="-architecture-technique"></a>🏗 Architecture Technique
+
+L'infrastructure repose sur une séparation claire des responsabilités :
+
+### Pipeline CI/CD
+
+L'automatisation est gérée via GitHub Actions pour assurer la qualité du code et le déploiement continu.
 
 ```mermaid
 flowchart TD
-    A[👩‍💻 Utilisateur / Client] -->|Envoie des données : requête HTTP| B[⚡ FastAPI - API]
-    B --> C[✅ Pydantic - Validation des entrées]
-    C --> D[🧠 Modèle ML - Prédiction]
-    D --> E[(💾 PostgreSQL - Base de données)]
-    E --> D
-    D -->|Renvoie la prédiction| B
-    B -->|Renvoie la réponse JSON| A
-
-    subgraph Infrastructure
-        F[🐳 Docker - Conteneur]
-        G[☁️ Hugging Face Spaces - Hébergement]
-        H[🤖 GitHub Actions - CI/CD]
+    A[💾 Push ou Pull Request sur main] --> B{🔍 Job 1: Flake8<br/><i>Analyse Statique</i>}
+    
+    subgraph Parallel_Checks [Vérifications en parallèle]
+        direction LR
+        C[🎨 Job 2: Black<br/><i>Formatage</i>]
+        D[🧪 Job 3: Pytest<br/><i>Tests unitaires</i>]
     end
 
-    F --> B
-    H --> F
-    H --> G
-    G --> B
+    B --> C
+    B --> D
+    
+    C --> E[🚀 Job 4: Sync to Hugging Face]
+    D --> E
+    B --> E
+
+    E --> F[✅ Application à jour sur Hugging Face Spaces]
 ```
 
-## 💾 Architecture de Données (PostgreSQL)
+### Stack Technologique
 
-Afin d'assurer une traçabilité complète et de surveiller le *Data Drift*, nous avons opté pour une architecture "Flat Table". Chaque prédiction (inputs + outputs) est stockée dans une table unique.
+La liste des outils utilisés dans ce projet est la suivante :
 
-Voici le schéma relationnel (Entity-Relationship Diagram) de la table `predictions` :
+| Technologie | Usage |
+| ----------- | --- |
+| Python 3.12+ | Langage principal |
+| FastAPI | Framework API haute performance |
+| Scikit-Learn | Modélisation et pipelines ML |
+| PostgreSQL | Base de données relationnelle (Persistance) |
+| Docker | Conteneurisation de l'application |
+| GitHub Actions | CI/CD (Intégration et Déploiement Continus) |
+| Hugging Face | Hébergement Cloud (PaaS) |
+
+#### Architecture logique interne
 
 ```mermaid
-erDiagram
-    PREDICTION_HISTORY {
-        INTEGER id PK "Clé Primaire (Auto-incrémentée)"
-        TIMESTAMP timestamp "Horodatage de la requête"
-        VARCHAR frequence_deplacement "Input : Frequency"
-        INTEGER revenu_mensuel "Input : MonthlyIncome"
-        VARCHAR heure_supplementaires "Input : OverTime"
-        INTEGER distance_domicile_travail "Input : DistanceFromHome"
-        INTEGER satisfaction_employee_environnement "Input : EnvironmentSatisfaction"
-        INTEGER satisfaction_employee_nature_travail "Input : JobSatisfaction"
-        INTEGER satisfaction_employee_equipe "Input : RelationshipSatisfaction"
-        INTEGER satisfaction_employee_equilibre_pro_perso "Input : WorkLifeBalance"
-        INTEGER annee_experience_totale "Input : TotalWorkingYears"
-        INTEGER annees_dans_l_entreprise "Input : YearsAtCompany"
-        INTEGER nombre_participation_pee "Input : TrainingTimesLastYear"
-        INTEGER age "Input : Age"
-        INTEGER annes_sous_responsable_actuel "Input : YearsWithCurrManager"
-        INTEGER nombre_experiences_precedentes "Input : NumCompaniesWorked"
-        INTEGER note_evaluation_precedente "Input : PerformanceRating"
-        VARCHAR prediction "Output : 0 (Reste) ou 1 (Démission)"
-        FLOAT probability "Output : Score de confiance (0.0 à 1.0)"
-    }
+graph TD
+    %% Définition des nœuds (Fichiers)
+    App[🚀 app.py<br/>Point d'entrée API FastAPI]
+    Schemas[📋 schemas.py<br/>Modèles Pydantic & Validation]
+    Utils[⚙️ utils.py<br/>Préprocessing & Feature Engineering]
+    DB[💾 database.py<br/>Config SQLAlchemy & Modèles ORM]
+    
+    %% Scripts "One-shot"
+    CreateDB[🛠️ create_db.py<br/>Script création tables]
+    InsertData[📥 insert_data.py<br/>Script ETL & Import CSV]
+    
+    %% Environnement & Tests
+    Docker[🐳 Dockerfile<br/>Construction de l'image]
+    TestApp[🧪 test_app.py<br/>Tests d'intégration API]
+    TestUtils[🧪 test_utils.py<br/>Tests unitaires logique]
+
+    %% Relations principales (Dépendances)
+    App -->|Valide les inputs| Schemas
+    App -->|Transforme les données| Utils
+    App -->|Sauvegarde l'historique| DB
+    
+    Utils -->|Utilise la structure| Schemas
+    
+    %% Relations Base de données
+    CreateDB -->|Initialise le schéma| DB
+    InsertData -->|Insère données via| DB
+    
+    %% Relations de Test et Runtime
+    TestApp -.->|Teste les endpoints| App
+    TestUtils -.->|Teste la fonction preprocess| Utils
+    Docker -.->|Lance le serveur Uvicorn| App
 ```
 
-## 🛠️ Installation et Configuration
+<p align="right"><a href="#readme-top">⬆️ Revenir au sommaire</a></p>
 
-### Prérequis
+---
+
+## <a id="-guide-dutilisation"></a>🚀 Guide d'Utilisation
+
+Ce projet est conçu pour être flexible. Vous pouvez l'utiliser soit en mode "Démo" sur le cloud, soit en mode "Complet" sur votre machine locale.
+
+### <a id="demo"></a>☁️ Option A : Accès Rapide (Démo Cloud)
+Pour tester le modèle immédiatement sans aucune installation technique :
+
+* 🌍 Accéder à l'application : [🔗 [5-deploy-ml](https://huggingface.co/spaces/JonathanFernandez/5-deploy-ml)]
+* 📖 Documentation API (Swagger) : Accessible via l'endpoint `/docs` sur l'URL du Space.
+
+⚠️ **Note importante** : Cette version hébergée sur Hugging Face fonctionne en environnement sandbox. Contrairement à la version locale, les prédictions ne sont pas enregistrées dans une base de données persistante.
+
+### 💻 Option B : Installation Locale (Développement)
+
+Pour disposer de toutes les fonctionnalités, y compris l'historisation en base de données PostgreSQL.
+
+#### 1. Prérequis
 
 * Python 3.12+
 * PostgreSQL (local ou Docker)
 * Git
 
-### Installation locale
+#### 2. Installation
 
-1. Cloner le dépôt :
+Cloner le dépôt :
 
 ```bash
 git clone [https://github.com/Jojo4911/5-deploy-ml.git](https://github.com/ojo4911/5-deploy-ml.git)
 cd futurisys-attrition-app
 ```
 
-2. Initialiser l'environnement :
+Initialiser l'environnement :
 
 Ce projet utilise Poetry pour la gestion des paquets, mais un fichier `requirements.txt` est également fourni.
 
@@ -118,27 +207,17 @@ poetry install
 pip install -r requirements.txt
 ```
 
-3. Configuration de la Base de Données et des Secrets (.env)
+#### 3. Configuration (.env)
 
 Le projet nécessite une base de données PostgreSQL.
 
 Créez une base de données vide nommée projet5_db (via pgAdmin ou psql).
 
-À la racine du projet, créez un fichier nommé .env.
+Renommez le fichier .env.example en .env et configurez vos accès.
 
-Copiez-y le contenu suivant en adaptant vos identifiants :
+#### 4. Lancement
 
-```
-# Fichier .env
-DB_USER=postgres
-DB_PASSWORD=votre_mot_de_passe
-DB_HOST=localhost
-DB_NAME=projet5_db
-```
-
-4. Initialisation des Données
-
-Deux scripts sont à votre disposition pour préparer l'environnement :
+Deux scripts sont à votre disposition pour préparer l'environnement de la base de données :
 
 ```
 # 1. Créer les tables dans la base de données
@@ -148,107 +227,141 @@ poetry run python create_db.py
 poetry run python insert_data.py
 ```
 
-## 🌍 Déploiement sur Hugging Face Spaces
-
-L'application est synchronisée automatiquement avec Hugging Face.
-* **URL du Space** : https://huggingface.co/spaces/thewayofwisedom/5-deploy-ml
-* **Configuration** : Le déploiement utilise un environnement Docker pour garantir la reproductibilité des prédictions.
-
-## 🖥️ Utilisation de l'API
-
-### Architecture logique interne de l’API FastAPI
-
-```mermaid
-graph TD
-    A[🌐 main.py - Point d'entrée API]
-    A --> B[📦 routes/ - Définit les endpoints : predict, health...]
-    A --> C[🧩 models/ - Modèle ML & préprocesseur]
-    A --> D[🧾 schemas.py - Classes Pydantic]
-    A --> E[🧰 utils/ - Fonctions utilitaires]
-    A --> F[🧪 tests/ - Tests Pytest]
-    A --> G[💾 database/ - Connexion PostgreSQL]
-
-    B --> D
-    B --> C
-    B --> G
-    F --> A
-```
-
-### Lancement local
+Pour lancer l’API localement :
 
 ```
 uvicorn app.main:app --reload
 ```
 
-### Exemple de requête (Prédiction d'attrition)
+* L'API sera accessible sur : `http://localhost:8000`
+* La documentation Swagger : `http://localhost:8000/docs`
+* La base de données sera initialisée automatiquement.
 
-L'API attend 15 caractéristiques socio-professionnelles de l'employé :
-```
+<p align="right"><a href="#readme-top">⬆️ Revenir au sommaire</a></p>
+
+---
+
+## <a id="-documentation-api"></a>📖 Documentation API
+
+L'API est documentée automatiquement selon le standard OpenAPI.
+
+**Endpoints Principaux**
+
+| Endpoint | Description |
+|-----------|--------------|
+| `GET/` | Endpoint d’accueil |
+| `GET/health` | Vérification de l’état du service |
+| `GET/model-info` | Informations du modèle |
+| `POST/predict` | Prédiction de l’attition des employés |
+
+* **Input** : JSON contenant 15 caractéristiques socio-professionnelles de l'employé.
+* **Output** : Probabilité d'attrition et classe prédite (0 ou 1).
+
+*Persistance* : Sauvegarde automatique des données et du résultat en base (mode Local uniquement).
+
+Exemple de requête (cURL) :
+
+```bash
 curl -X 'POST' \
-  '[https://votre-space.hf.space/predict](https://votre-space.hf.space/predict)' \
-  -H 'X-API-KEY: votre_cle' \
+  'https://jonathanfernandez-5-deploy-ml.hf.space/predict' \
+  -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "frequence_deplacement": "Occasionnel",
-  "heure_supplementaires": "Non",
-  "annees_dans_l_entreprise": 12,
-  "nombre_participation_pee": 2,
-  "age": 47,
-  "revenu_mensuel": 5993,
-  "annes_sous_responsable_actuel": 5,
-  "distance_domicile_travail": 8,
-  "satisfaction_employee_environnement": 2,
-  "satisfaction_employee_nature_travail": 4,
+  "frequence_deplacement": "Aucun",
+  "revenu_mensuel": 0,
+  "heure_supplementaires": "Oui",
+  "distance_domicile_travail": 0,
+  "satisfaction_employee_environnement": 1,
+  "satisfaction_employee_nature_travail": 1,
   "satisfaction_employee_equipe": 1,
-  "satisfaction_employee_equilibre_pro_perso": 3,
-  "annee_experience_totale": 8,
-  "nombre_experiences_precedentes": 3,
-  "note_evaluation_precedente": 3
+  "satisfaction_employee_equilibre_pro_perso": 1,
+  "annee_experience_totale": 0,
+  "annees_dans_l_entreprise": 0,
+  "nombre_participation_pee": 0,
+  "age": 0,
+  "annes_sous_responsable_actuel": 0,
+  "nombre_experiences_precedentes": 0,
+  "note_evaluation_precedente": 1
 }'
 ```
 
-## 📊 Structure des Données (PostgreSQL)
+Exemple de réponse :
 
-Chaque requête à l'API est enregistrée pour permettre au client TechNova Partners d'auditer les décisions du modèle.
+```bash
+{
+  "prediction": "The employee is likely to stay",
+  "probability": 0.4000913531689877,
+  "input_processed": [
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1
+    ]
+  ]
+}
+```
 
-Table `predictions`
-* `id` : Identifiant unique.
-* `employee_features` : Données envoyées (Age, Salaire, etc.) au format JSONB.
-* `attrition_probability` : Score de probabilité calculé par le Random Forest.
-* `prediction` : Résultat final (0 ou 1).
-* `created_at` : Horodatage de la requête.
+<p align="right"><a href="#readme-top">⬆️ Revenir au sommaire</a></p>
 
-## 🧪 Tests et Fiabilité
+---
+
+## 🧪 Qualité & Tests
+
 La robustesse du déploiement est vérifiée par une suite de tests :
 * **Tests Unitaires** : Validation du chargement du modèle et des fonctions de prétraitement.
 * **Tests Fonctionnels** : Simulation d'appels API avec des cas limites (données manquantes, formats invalides).
 
-```
+Pour lancer les tests en local :
+
+```bash
+# Installation des dépendances de test
+pip install -r requirements.txt
+
 # Lancer les tests
 pytest
-# Vérifier la couverture
-pytest --cov=app --cov=utils
+
+# Lancement de la suite avec rapport de couverture
+pytest --cov=app --cov-report=term-missing
 ```
 
-## 🔄 Pipeline CI/CD
+<p align="right"><a href="#readme-top">⬆️ Revenir au sommaire</a></p>
 
-La pipeline CI/CD peut être représentée simplement de la manière suivante :
+---
 
-```mermaid
-flowchart LR
-    A[💾 Commit sur GitHub] --> B[🔍 GitHub Actions - Lancement pipeline]
-    B --> C[🧪 Étape 1 : Exécution des tests : pytest]
-    C --> D[🐍 Étape 2 : Vérification du code : linting, formatting]
-    D --> E[🐳 Étape 3 : Build de l'image Docker]
-    E --> F[☁️ Étape 4 : Déploiement sur Hugging Face Spaces]
-    F --> G[✅ Application accessible en ligne]
+## <a id="-roadmap"></a>🗺 Roadmap
 
-```
+* [x] Entraînement et optimisation du modèle Random Forest.
+* [x] Création de l'API avec FastAPI.
+* [x] Conteneurisation Docker.
+* [x] Pipeline CI/CD GitHub Actions.
+* [x] Déploiement sur Hugging Face Spaces.
+* [ ] Ajout d'un dashboard de monitoring (Streamlit/Grafana).
+* [ ] Réentraînement automatique sur les nouvelles données.
 
-Le workflow GitHub Actions assure :
+<p align="right"><a href="#readme-top">⬆️ Revenir au sommaire</a></p>
 
-1. La validation du code (Linting & Tests).
-2. Le build de l'image Docker.
-3. Le push vers le secret `HF_TOKEN` pour mettre à jour le Space Hugging Face en temps réel.
+---
 
-*Livrable réalisé pour le projet d'ingénierie IA - Client : Futurisys / Cas d'étude : TechNova Partners.*
+## <a id="-contact"></a>👤 Auteurs & Licence
+
+Projet 5, réalisé dans le cadre de la formation **IA Engineer - OpenClassrooms**.
+
+Distribué sous la licence MIT.
+
+Contact : Jonathan FERNANDEZ - [Lien LinkedIn ou Email]
+
+<p align="right"><a href="#readme-top">⬆️ Revenir au sommaire</a></p>
